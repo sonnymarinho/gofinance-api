@@ -25,6 +25,10 @@ export default class CreateTransactions1590211662042
             scale: 2,
           },
           {
+            name: 'type',
+            type: 'varchar',
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',
