@@ -24,7 +24,14 @@ class CreateTransactionService {
     const transactionsRepository = getCustomRepository(TransactionRepository);
     const categoryRepository = getRepository(Category);
 
-    // Verifying if type is valid
+    const { total } = await transactionsRepository.getBalance();
+
+    // Verifying outcome creation withow a valid balance
+    if (type === 'outcome' && value > total) {
+      throw new AppError('Outcome value exceeds balance.', 400);
+    }
+
+    // * Verifying if type is valid
     if (!transactionsTypes.includes(type)) {
       throw new AppError('Transaction type invalid', 400);
     }
@@ -50,7 +57,7 @@ class CreateTransactionService {
       title,
       type,
       value,
-      category_id: transactionCategory.id,
+      category: transactionCategory,
     });
 
     await transactionsRepository.save(transaction);
